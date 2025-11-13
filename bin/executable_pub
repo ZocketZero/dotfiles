@@ -1,11 +1,11 @@
 #!/usr/bin/zsh
 
-if [[ "$1" == "pub"|| "$1" == "p" ]]; then
+# if [[ "$1" == "pub"|| "$1" == "p" ]]; then
 	printf "ipv4: ";
 	# curl ifconfig.co -4;
 	curl ip-api.com -sS|grep query|awk '{print $3}'|sed 's/"//g'
 	printf "ipv6: ";
 	curl ifconfig.co -6;
-else
-	/usr/sbin/ip $@;
-fi;
+# else
+	# /usr/sbin/ip $@;
+# fi;
