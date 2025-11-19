@@ -4,6 +4,7 @@ alias q="exit"
 alias psn='ps -o user,pid,ni,stat,start,time,cmd'
 alias y='yes'
 alias lss='ls -Ssrh'
+alias lst='ls -tr'
 
 # Shorter commands for any program.
 alias pod='podman'
