@@ -1,7 +1,7 @@
 -- setup mason
 return {
   {
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
     opts = {
       ensure_installed = {
         --  mason auto nstall here
