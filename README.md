@@ -7,7 +7,7 @@ I currently learn and try to understand what is dotfiles manager. I have saw dot
 #### Install chezmoi and apply Dotfiles with script 
 
 ```bash
-sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply Arikato111
+sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply ZocketZero
 ```
 #### Or install before and apply after.
 
@@ -15,7 +15,7 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply Arikato111
 - command to apply dotfiles from github repo
 
 ```bash
-chezmoi init --apply Arikato111
+chezmoi init --apply ZocketZero
 ```
 
 ### Applications
