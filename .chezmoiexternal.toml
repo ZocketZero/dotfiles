@@ -1,7 +1,7 @@
 [".oh-my-zsh"]
-    type = "git-repo"
-    url = "https://github.com/ohmyzsh/ohmyzsh.git"
-    refreshPeriod = "168h"
+    type = "archive"
+    url = "https://github.com/ohmyzsh/ohmyzsh/archive/master.zip"
+    stripComponents = 1
 [".oh-my-zsh/custom/plugins/zsh-completions"]
     type = "git-repo"
     url = "https://github.com/zsh-users/zsh-completions.git"
@@ -16,5 +16,5 @@
     refreshPeriod = "168h"
 [".oh-my-zsh/custom/themes/zero.zsh-theme"]
     type = "file"
-    url = "https://raw.githubusercontent.com/ZocketZero/zero-zsh-theme/refs/heads/main/zero.zsh-theme"
+    url = "https://raw.githubusercontent.com/ZocketZero/zero-zsh-theme/main/zero.zsh-theme"
     refreshPeriod = "168h"
