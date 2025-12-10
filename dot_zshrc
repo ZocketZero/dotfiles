@@ -1,10 +1,14 @@
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
-# ZSH_THEME="agnoster"
-ZSH_THEME="amuse"
-# ZSH_THEME="dst"
-# ZSH_THEME="af-magic"
+# ZSH_THEME="amuse" # 2 rows (path, git branch, time) no-print-error
+# ZSH_THEME="dst" # 2 rows (user@host, path, git branch, :[right] time) print-error-as-[message]
+# ZSH_THEME="af-magic" # 1 row and line print-error-as-[number]
+# ---
+# ZSH_THEME="bira" # 2 rows (user@host, path, git branch) line-connect-rows print-error-as-[number]
+# ZSH_THEME="kphoen" # 2 rows (user@host, path, git branch) line-connect-rows print-error-as-[number]
+ZSH_THEME="zero"
+
 
 fpath=($HOME/.oh-my-zsh/custom/plugins/zsh-completions/src $fpath)
 
