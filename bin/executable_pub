@@ -1,11 +1,17 @@
 #!/usr/bin/zsh
 
-# if [[ "$1" == "pub"|| "$1" == "p" ]]; then
-	printf "ipv4: ";
-	# curl ifconfig.co -4;
-	curl ip-api.com -sS|grep query|awk '{print $3}'|sed 's/"//g'
+# Get ipv4
+if [[ "$1" == "-4" || "$1" == "" ]]; then
+	# curl ip-api.com -sS|grep query|awk '{print $3}'|sed 's/"//g'
+  echo "IPv4: $(curl ipinfo.io/ip 2> /dev/null)"
+fi
+
+# Get IPv6
+if [[ "$1" == "-6" || "$1" == "" ]]; then
 	printf "ipv6: ";
-	curl ifconfig.co -6;
-# else
-	# /usr/sbin/ip $@;
-# fi;
+	curl ifconfig.co -6 2> /dev/null;
+  # If curl failed cause IPv6 is not provided.
+  if [[ $? != 0 ]]; then
+    echo -n None
+  fi
+fi;
