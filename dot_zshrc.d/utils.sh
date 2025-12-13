@@ -7,8 +7,8 @@ alias lss='ls -Ssrh'
 alias lst='ls -tr'
 
 # Shorter commands for any program.
-alias pd='podman'
-alias pdc='podman-compose'
+alias pod='podman'
+alias podc='podman-compose'
 alias ipd='ip addr show'
 alias fwd='sudo firewall-cmd'
 alias pxc='proxychains -q'
