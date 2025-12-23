@@ -4,7 +4,6 @@ alias q="exit"
 alias psn='ps -o user,pid,ni,stat,start,time,cmd'
 alias y='yes'
 alias lss='ls -Ssrh'
-alias lst='ls -tr'
 
 # Shorter commands for any program.
 alias pod='podman'
@@ -16,6 +15,13 @@ alias pxc='proxychains -q'
 is_nu_exist=$(command -v nu 2> /dev/null);
 
 
+lst() {
+  if [[ "$is_nu_exist" != "" ]];then
+    nu -c 'ls | sort-by modified | print'
+  else
+    alias lst='ls -tr'
+  fi
+}
 # Disk utils
 unalias ls;
 # using nu command for ls.
@@ -23,8 +29,6 @@ if [[ "$is_nu_exist" != "" ]];then
     ls() {
         ls_arg=$(echo -n $@ | sed 's#:#|#g')
         nu -c "ls $ls_arg"
-        # echo $@
-        # echo $ls_arg
     }
     lsd() {
         nu -c "ls -da | sort-by size | print"
