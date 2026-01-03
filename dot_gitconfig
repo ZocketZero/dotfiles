@@ -1,7 +1,7 @@
 [user]
 	name = Nawasan Wisitsingkhon
-	email = nawasan.dev@gmail.com
-	signingkey = nawasan.dev@gmail.com
+	email = zocketzero@proton.me
+	signingkey = zocketzero@proton.me
 [init]
 	defaultBranch = main
 [core]
