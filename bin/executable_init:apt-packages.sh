@@ -2,23 +2,25 @@
 
 packages=(
     git
-    neofetch
+    fastfetch 
     curl
+    wget
+    gh
+    glab
+    7zip
     resolvconf
     zsh
+    fonts-firacode
+    fonts-thai-tlwg
+    bibata-cursor-theme
+    papirus-icon-theme
 )
 
 # loop to install packages with apt
-echo "installing packages from apt (y/n)"
+echo "installing packages from apt (y/N)"
 read na
 if [ "$na" == "Y" ] || [ "$na" == "y" ]
 then
-    for value in ${packages[@]}
-    do
-        sudo apt install $value -y;
-    done
+    sudo apt install "$packages"
 fi
 
-# config default shell
-echo "set zsh default shell"
-chsh -s $(which zsh)
