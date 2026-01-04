@@ -21,6 +21,6 @@ echo "installing packages from apt (y/N)"
 read na
 if [ "$na" == "Y" ] || [ "$na" == "y" ]
 then
-    sudo apt install "$packages"
+    sudo apt install "${packages[@]}"
 fi
 
