@@ -2,15 +2,12 @@
 installer='sudo apt install -y'
 
 packages = [
-    "git",
-    "fastfetch",
-    "curl",
-    "wget",
-    "gh",
-    "glab",
-    "7zip",
-    "resolvconf",
+    "rustup", "golang", "vim",
+    "git", "build-essential", "fd-find",
+    "fastfetch", "curl", "wget",
+    "gh", "glab", "7zip", "resolvconf",
     "zsh",
+    # Fonts and Icons.
     "fonts-firacode",
     "fonts-thai-tlwg",
     "bibata-cursor-theme",
