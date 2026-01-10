@@ -4,9 +4,10 @@ installer='sudo apt install -y'
 packages = [
     "rustup", "golang", "vim",
     "git", "build-essential", "fd-find",
-    "fastfetch", "curl", "wget",
+    "net-tools", "irssi", "neovim",
+    "fastfetch", "curl", "wget", "vlc",
     "gh", "glab", "7zip", "resolvconf",
-    "zsh",
+    "zsh", "figlet",
     # Fonts and Icons.
     "fonts-firacode",
     "fonts-thai-tlwg",
