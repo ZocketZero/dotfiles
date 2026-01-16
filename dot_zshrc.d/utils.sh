@@ -3,9 +3,15 @@ alias fpk="flatpak"
 alias q="exit"
 alias psn='ps -o user,pid,ni,stat,start,time,cmd'
 alias y='yes'
-alias lss='du -sh * | sort -h'
+lss() {
+    if [[ "$@" == "" ]];then
+        du -hd 0 * 2> /dev/null | sort -h
+    else
+        du -hd 0 "$@" 2> /dev/null | sort -h
+    fi
+}
 
-# Shorter commands for any program.
+# Shorter commands for any programs.
 alias pod='podman'
 alias podc='podman-compose'
 alias ipd='ip addr show'
