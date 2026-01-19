@@ -36,7 +36,7 @@ lst() {
   if [[ "$is_nu_exist" != "" ]];then
     nu -c 'ls | sort-by modified | print'
   else
-    alias lst='ls -tr'
+    ls -tr "$@"
   fi
 }
 # Disk utils
