@@ -1,4 +1,11 @@
-distro="bookworm"
+#!/usr/bin/bash
+
+if [[ "$1" == "" ]]; then
+  distro="$(lsb_release -cs)"
+else
+  distro="$1"
+fi
+
 # Add cloudflare gpg key
 curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | sudo gpg --yes --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg
 
