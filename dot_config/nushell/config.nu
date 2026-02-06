@@ -17,3 +17,5 @@
 # options using:
 #     config nu --doc | nu-highlight | less -R
 use modules *
+
+$env.config = (settings)
