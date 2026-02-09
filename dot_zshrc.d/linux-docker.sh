@@ -9,8 +9,9 @@ if [[ "$runner" == "" ]]; then
   return
 fi
 
-alias archlinux:docker='$runner run -it --rm --network=host --name archlinux archlinux'
-alias debian:docker='$runner run -it --rm --network=host --name debian debian'
-alias kali:docker='$runner run -it --rm --network=host --name kali kalilinux/kali-rolling'
-alias ubuntu:docker='$runner run -it --rm --network=host --name ubuntu ubuntu'
-alias alpine:docker='$runner run -it --rm --network=host --name alpine alpine'
+alias vm/archlinux='$runner run -it --rm --network=host --name archlinux archlinux'
+alias vm/debian='$runner run -it --rm --network=host --name debian debian'
+alias vm/kali='$runner run -it --rm --network=host --name kali kalilinux/kali-rolling'
+alias vm/ubuntu='$runner run -it --rm --network=host --name ubuntu ubuntu'
+alias vm/alpine='$runner run -it --rm --network=host --name alpine alpine'
+alias vm/fedora='$runner run -it --rm --network=host --name fedora fedora'
