@@ -1,17 +1,34 @@
-runner=""
+vm_runner=""
 if command -v podman >/dev/null; then
-  runner=podman
+  vm_runner=podman
 elif command -v docker >/dev/null; then
-  runner=docker
+  vm_runner=docker
 fi
 
-if [[ "$runner" == "" ]]; then
+if [[ "$vm_runner" == "" ]]; then
   return
 fi
 
-alias vm/archlinux='$runner run -it --rm --network=host --name archlinux archlinux'
-alias vm/debian='$runner run -it --rm --network=host --name debian debian'
-alias vm/kali='$runner run -it --rm --network=host --name kali kalilinux/kali-rolling'
-alias vm/ubuntu='$runner run -it --rm --network=host --name ubuntu ubuntu'
-alias vm/alpine='$runner run -it --rm --network=host --name alpine alpine'
-alias vm/fedora='$runner run -it --rm --network=host --name fedora fedora'
+vm_list=(
+  'archlinux' 'archlinux'
+  "debian" "debian"
+  "kali" "kalilinux/kali-rolling"
+  "ubuntu" "ubuntu"
+  "alpine" "alpine"
+  "fedora" "fedora"
+)
+
+for ((i=1; i < ${#vm_list[@]};i+=2));do
+eval "
+\"vm/${vm_list[$i]}\"() {
+  local vm_mount=\"\"
+  if [[ \"\$1\" == \"-v\" ]];then
+    vm_mount=(-v \"\$PWD:/app\")
+    shift
+  fi
+  ${vm_runner} run -it --rm --network=host \${vm_mount[@]} --name "${vm_list[$i]}" "${vm_list[((i + 1))]}"
+  }
+"
+done
+
+unset -m 'vm_*'
