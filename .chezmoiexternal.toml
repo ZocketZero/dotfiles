@@ -18,7 +18,3 @@
     type = "git-repo"
     url = "https://github.com/romkatv/powerlevel10k.git"
     refreshPeriod = "168h"
-[".oh-my-zsh/custom/themes/zero.zsh-theme"]
-    type = "file"
-    url = "https://raw.githubusercontent.com/ZocketZero/zero-zsh-theme/main/zero.zsh-theme"
-    refreshPeriod = "168h"
