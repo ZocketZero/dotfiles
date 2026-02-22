@@ -17,6 +17,7 @@ alias podc='podman-compose'
 alias ipd='ip addr show'
 alias fwd='sudo firewall-cmd'
 alias pxc='proxychains -q'
+alias gla='git log --graph --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset"'
 
 # Podman
 lpod() {
