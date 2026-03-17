@@ -6,7 +6,13 @@ export def lsd [] { ls -da | sort-by size | print }
 # List and sort by size
 export def lss [] { ls -da | sort-by size }
 # List and sort by modified
-export def lst [] { ls -a | sort-by modified | print }
+export def lst [-p] { 
+  if $p {
+  ls -a | sort-by modified | print
+  } else {
+  ls -a | sort-by modified
+  }
+}
 
 export alias pod = podman
 export alias podc = podman-compose
