@@ -16,6 +16,7 @@ vm_list=(
   "ubuntu" "ubuntu"
   "alpine" "alpine"
   "fedora" "fedora"
+  "opensuse" "opensuse/leap"
 )
 
 for ((i=1; i < ${#vm_list[@]};i+=2));do
