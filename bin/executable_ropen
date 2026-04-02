@@ -17,7 +17,7 @@ elif [[ "$1" == "m" || "$1" == "media" ]];then
 
 # open videos randomly.
 elif [[ "$1" == "video" || "$1" == "v" ]];then
-    all_file=$(find . -regextype posix-egrep -regex ".*\.(mp4|m4a|mov|avi|mpeg|gif)")
+    all_file=$(find . -regextype posix-egrep -regex ".*\.(mp4|mov|avi|mpeg|gif)")
 
 # open image randomly.
 elif [[ "$1" == "image" || "$1" == "i" ]];then
