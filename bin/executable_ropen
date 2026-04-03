@@ -1,4 +1,4 @@
-#!zsh
+#!/usr/bin/zsh
 # This program will open files randomly.
 
 # Print help message.
