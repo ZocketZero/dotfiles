@@ -6,5 +6,6 @@ $env.PATH = ($env.PATH | append [
 
 use init.nu *
 
+create-dummy-file 
 setup-mise 
 setup-carapace 

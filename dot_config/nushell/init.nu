@@ -1,3 +1,9 @@
+export def create-dummy-file [] {
+  ["mise.nu", "carapace.nu"] | each {|f| 
+    let p = ($nu.cache-dir | path join $f)
+    if not ($p | path exists) { "" | save $p }
+  }
+}
 export def setup-mise [] {
   mkdir $"($nu.cache-dir)"
   if (which mise | is-not-empty ) {
