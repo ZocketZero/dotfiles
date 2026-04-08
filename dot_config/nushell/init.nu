@@ -1,4 +1,5 @@
 export def create-dummy-file [] {
+  mkdir $"($nu.cache-dir)"
   ["mise.nu", "carapace.nu"] | each {|f| 
     let p = ($nu.cache-dir | path join $f)
     if not ($p | path exists) { "" | save $p }
