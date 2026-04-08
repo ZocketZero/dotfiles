@@ -1,21 +1,34 @@
-# config.nu
-#
-# Installed by:
-# version = "0.109.1"
-#
-# This file is used to override default Nushell settings, define
-# (or import) custom commands, or run any other startup tasks.
-# See https://www.nushell.sh/book/configuration.html
-#
-# Nushell sets "sensible defaults" for most configuration settings, 
-# so your `config.nu` only needs to override these defaults if desired.
-#
-# You can open this file in your default editor using:
-#     config nu
-#
-# You can also pretty-print and page through the documentation for configuration
-# options using:
-#     config nu --doc | nu-highlight | less -R
 use modules *
 
-$env.config = (settings)
+$env.config = {
+  show_banner: false
+  completions: {
+    algorithm: "prefix"
+  }
+}
+
+$env.PATH = ($env.PATH | append [
+  ($env.HOME |path join .cargo bin)
+  ($env.HOME |path join .local bin)
+  ($env.HOME |path join bin)
+])
+
+# create cache dir
+if ($"($nu.cache-dir)" | path exists ) {
+  mkdir $"($nu.cache-dir)"
+}
+
+# activate mise
+source utils/mise_activate.nu
+
+$env.CARAPACE_BRIDGES = 'zsh,fish,bash,inshellisense' # optional
+if (which carapace | is-not-empty ) {
+  carapace _carapace nushell | save --force $"($nu.cache-dir)/carapace.nu"
+} else if (mise exec -- carapace | complete ).exit_code == 0 {
+  mise exec -- carapace _carapace nushell | save --force $"($nu.cache-dir)/carapace.nu"
+}
+
+if ($"($nu.cache-dir)/carapace.nu" | path exists ) {
+  echo 'activated carapace'
+  source $"($nu.cache-dir)/carapace.nu"
+}
