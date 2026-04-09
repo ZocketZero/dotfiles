@@ -1,25 +1,21 @@
-export def create-dummy-file [] {
-  mkdir $"($nu.cache-dir)"
-  ["mise.nu", "carapace.nu"] | each {|f| 
-    let p = ($nu.cache-dir | path join $f)
-    if not ($p | path exists) { "" | save $p }
-  }
-}
-export def setup-mise [] {
-  mkdir $"($nu.cache-dir)"
+# generate mise activate to nu.d directory
+def setup-mise [] {
   if (which mise | is-not-empty ) {
-    mise activate nu | save --force $"($nu.cache-dir)/mise.nu"
+    mise activate nu | save --force $"($nu.default-config-dir)/nu.d/mise.nu"
+  } else {
+    print 'mise command not found'
   }
 }
 
-export def setup-carapace [] {
+# generate carapace script to nu.d directory
+def setup-carapace [] {
   mkdir $"($nu.cache-dir)"
 
   # generate carapace
   if (which carapace | is-not-empty ) {
-    carapace _carapace nushell | save --force $"($nu.cache-dir)/carapace.nu"
+    carapace _carapace nushell | save --force $"($nu.default-config-dir)/nu.d/carapace.nu"
   } else if (which mise | is-not-empty )  and (mise exec -- carapace | complete ).exit_code == 0 {
-    mise exec -- carapace _carapace nushell | save --force $"($nu.cache-dir)/carapace.nu"
+    mise exec -- carapace _carapace nushell | save --force $"($nu.default-config-dir)/nu.d/carapace.nu"
   }
 
 }

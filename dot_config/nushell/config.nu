@@ -8,5 +8,5 @@ $env.config = {
 }
 
 $env.CARAPACE_BRIDGES = 'zsh,fish,bash,inshellisense' # optional
-source $"($nu.cache-dir)/mise.nu"
-source $"($nu.cache-dir)/carapace.nu"
+
+source $"($nu.cache-dir)/list.nu"
