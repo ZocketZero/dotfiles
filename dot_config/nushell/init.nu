@@ -1,5 +1,5 @@
 # generate mise activate to nu.d directory
-def setup-mise [] {
+def "setup mise" [] {
   if (which mise | is-not-empty ) {
     mise activate nu | save --force $"($nu.default-config-dir)/nu.d/mise.nu"
   } else {
@@ -8,7 +8,7 @@ def setup-mise [] {
 }
 
 # generate carapace script to nu.d directory
-def setup-carapace [] {
+def "setup carapace" [] {
   mkdir $"($nu.cache-dir)"
 
   # generate carapace
