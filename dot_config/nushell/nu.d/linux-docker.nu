@@ -2,19 +2,20 @@ def vm [
   image: string@"vm ls-keys",
   -v # mount current path to container
 ] {
-  let vm_command =  if (which podman | is-not-empty ) {
-    "podman"
-  } else {
-    "docker"
-  }
-
-  let image = (vm ls | where key == $image ).image
+  let vm_command = vm runner; 
+  let image: string = (
+    vm ls | where key == $image |
+    if ($in | is-not-empty)
+      { $in.image |to text| str trim }
+    else {
+      if (input $"Are you sure to run \"($image)\" \(y/N\)?" | str downcase) == "y" { $image } else {print "Canceled"; return} })
   if $v {
-    ^$vm_command run -it --rm --network=host -v $"(pwd):/mnt" --name ...$image ...$image
+    ^$vm_command run -it --rm --network=host -v $"(pwd):/mnt" --name $image $image
   } else {
-    ^$vm_command run -it --rm --network=host --name ...$image ...$image
+    ^$vm_command run -it --rm --network=host --name $image $image
   }
 }
+
 # print list of images
 def "vm ls" [] {
   {
@@ -32,3 +33,12 @@ def "vm ls" [] {
 def "vm ls-keys" [] {
     vm ls | get key
 }
+
+def "vm runner" [] {
+  if (which podman | is-not-empty ) {
+    "podman"
+  } else {
+    "docker"
+  }
+}
+
