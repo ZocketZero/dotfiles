@@ -1,6 +1,14 @@
 export alias fpk = flatpak
 export alias q = exit
 export alias y = yes
+
+# Git alias command
+export alias ga = git add
+export alias gd = git diff
+export alias gc = git commit
+export alias gst = git status
+export alias gla = git log --graph --all --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset"
+
 # List and sort by size and print
 export def lsd [] { ls -da | sort-by size | print }
 # List and sort by size
