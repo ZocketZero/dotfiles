@@ -1,5 +1,3 @@
-use modules *
-
 $env.config = {
   show_banner: false
   completions: {
