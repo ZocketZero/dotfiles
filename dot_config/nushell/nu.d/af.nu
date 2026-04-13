@@ -24,7 +24,13 @@ def "af ext" [
 
 # print amount of files in directories
 def "af dir" [] {
-  ls | where type == dir |get name| each { { name: $in count: (glob ($in | path join **) | length ) }  } | sort-by count
+  let result = (glob **/*);
+  ls | where type == dir | each { |v|
+    {
+      dir: $v.name
+      count: (($result| find $v.name | length ) - 1 )
+    }
+  } | sort-by count
 }
 
 # List all files with specific extension
