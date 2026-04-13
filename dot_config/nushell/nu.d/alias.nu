@@ -9,8 +9,14 @@ alias gc = git commit
 alias gst = git status
 alias gla = git log --graph --all --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset"
 
+# Nushell
 alias sb = sort-by
 alias p = print
+
+# list with permissions
+def lsm [] {
+  ls -l | select type mode name size
+}
 
 # List and sort by size and print
 def lsd [] { ls -da | sort-by size | print }
