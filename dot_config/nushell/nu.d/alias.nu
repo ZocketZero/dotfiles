@@ -18,10 +18,16 @@ def lsm [] {
   ls -l | select type mode name size
 }
 
-# List and sort by size and print
-def lsd [] { ls -da | sort-by size | print }
+# list only directories
+def lsd [] { ls -a | where type == dir }
+# list only directories and print
+def lsdp [] { lsd | print }
+
 # List and sort by size
 def lss [] { ls -da | sort-by size }
+# List and sort by size and print
+def lssp [] { lss | print }
+
 # List and sort by modified
 def lst [-p] { 
   if $p {

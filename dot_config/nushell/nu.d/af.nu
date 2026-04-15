@@ -19,6 +19,14 @@ def "af image" [
   libaf_type image --current-dir=$current_dir | libaf_random_open $n
 }
 
+# Open a audio file randomly
+def "af audio" [
+  -n # dont automatic open file
+  --current-dir (-c) # random from files in current directory
+] {
+  libaf_type audio --current-dir=$current_dir | libaf_random_open $n
+} 
+
 # Open a video randomly from current directory and subdirectories randomly.
 def "af video" [
   -n # dont automatic open file
