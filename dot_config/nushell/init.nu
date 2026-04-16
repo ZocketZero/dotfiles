@@ -9,7 +9,7 @@ def "setup mise" [] {
 
 # install needed software by mise
 def "setup mise install-needed" [] {
-  mise use -g usage node@24 python deno bun rust-analyzer uv zig carapace starship
+[usage "node@24" python deno bun rust-analyzer uv zig carapace starship] | each {mise use -g $in | complete  }
 }
 
 # generate starship script to nu.d directory
