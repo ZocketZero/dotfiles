@@ -7,6 +7,8 @@ alias ga = git add
 alias gd = git diff
 alias gc = git commit
 alias gst = git status
+alias gcl = git clone --recurse-submodules
+alias gp = git push
 alias gla = git log --graph --all --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset"
 
 # Nushell
