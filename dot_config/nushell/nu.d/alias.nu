@@ -14,14 +14,17 @@ alias gla = git log --graph --all --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s
 # Nushell
 alias sb = sort-by
 alias p = print
+alias exp = explore
 
 # list with permissions
 def lsm [] {
-  ls -l | select type mode name size
+  ls -l | select type mode user group name size
 }
 
 # list only directories
 def lsd [] { ls -a | where type == dir }
+# list only directories with size
+def lsds [] { ls -ad | where type == dir|sort-by size }
 # list only directories and print
 def lsdp [] { lsd | print }
 
