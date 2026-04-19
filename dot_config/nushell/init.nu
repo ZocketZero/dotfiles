@@ -37,3 +37,12 @@ def "setup carapace" [] {
 
 }
 
+def "setup extrepo" [] {
+  if (which extrepo|length ) < 0 {
+    print "extrepo is not installed."
+    return;
+  }
+  ["mise" "breave_release" "docker-ce" "github-cli" "librewolf" "mozilla" "protonvpn" "vscode"]
+  | each {mise use -g $in | complete  }
+
+}
