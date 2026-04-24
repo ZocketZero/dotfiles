@@ -34,6 +34,7 @@ def "vm ls" [] {
     ubuntu  : "ubuntu"
     alpine :  "alpine"
     fedora :  "fedora"
+    alma: "almalinux"
     opensuse :  "opensuse/leap"
   } | transpose key image
 }
