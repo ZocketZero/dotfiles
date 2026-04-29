@@ -17,24 +17,24 @@ alias p = print
 alias exp = explore
 
 # list with permissions
-def lsm [] {
-  ls -l | select type mode user group name size
+def lsm [path: glob = .] {
+  ls -l $path | select type mode user group name size
 }
 
 # list only directories
-def lsd [] { ls -a | where type == dir }
+def lsd [path: glob = .] { ls -a $path | where type == dir }
 # list only directories with size
-def lsds [] { ls -ad | where type == dir|sort-by size }
+def lsds [path: glob = .] { ls -ad $path | where type == dir|sort-by size }
 # list only directories and print
-def lsdp [] { lsd | print }
+def lsdp [path: glob = .] { lsd $path | print }
 
 # List and sort by size
-def lss [] { ls -da | sort-by size }
+def lss [path: glob = .] { ls -da $path | sort-by size }
 # List and sort by size and print
-def lssp [] { lss | print }
+def lssp [path: glob = .] { lss $path | print }
 
 # List and sort by modified
-def lst [-p] { 
+def lst [-p] {
   if $p {
   ls -a | sort-by modified | print
   } else {
