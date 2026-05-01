@@ -18,7 +18,7 @@ alias exp = explore
 
 # list with permissions
 def lsm [path: glob = .] {
-    ls -l $path | select -o type modified user group name size
+    ls -l $path | select -o type mode user group name size
 }
 
 # list only directories
