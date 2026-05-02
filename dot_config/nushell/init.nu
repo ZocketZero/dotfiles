@@ -37,6 +37,7 @@ def "setup carapace" [] {
 
 }
 
+# Enable external repositories for Debian based distro with extrepo
 def "setup extrepo" [] {
   if (which extrepo|length ) < 0 {
     print "extrepo is not installed."
@@ -45,4 +46,16 @@ def "setup extrepo" [] {
   ["mise" "breave_release" "docker-ce" "github-cli" "librewolf" "mozilla" "protonvpn" "vscode"]
   | each {mise use -g $in | complete  }
 
+}
+
+# Install needed packages for hyprland
+def "setup hyprland" [command: string@[
+  "apt"
+] = "apt"] {
+
+  if $command == "apt" {
+    sudo apt install hyprland kitty waybar wofi fonts-font-awesome xdg-desktop-portal-hyprland cliphist wl-clipboard hyprland-qtutils hyprlauncher mako-notifier slurp grim
+  } else {
+    print $"($command) is not support"
+  }
 }
