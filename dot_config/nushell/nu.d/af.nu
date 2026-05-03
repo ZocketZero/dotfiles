@@ -106,7 +106,13 @@ def "af ls type" [
 
 def libaf_random_open [dont_open: bool] {
   if not ($in | is-empty ) {
-    $in | shuffle|first| do {  if not $dont_open { start $"./($in.name)"; }; echo $in.name }
+    $in | shuffle|first| do { 
+      if not $dont_open {
+        let name = $in.name;
+        job spawn {start $"./($name)";}
+      };
+      echo $in.name
+    }
   } else {
     print "not found any file"
   }
