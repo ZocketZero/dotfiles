@@ -1,0 +1,24 @@
+#!/usr/bin/bash
+
+code="$1"
+input="$2"
+output="$3"
+
+if [[ $code == "" || $input == "" || $output == "" ]]; then
+  echo invalid arguments
+  echo 'cffmpeg <encoder> <input> <output>'
+  echo 'encoder: h264, h265, av1'
+  exit
+fi
+
+case $code in
+av1)
+  ffmpeg -i "$input" -c:v libsvtav1 -c:a libopus "$output"
+  ;;
+h265)
+  ffmpeg -i "$input" -c:v libx265 "$input"
+  ;;
+h264)
+  ffmpeg -i "$input" -c:v libx264 -c:a aac -b:a 128k "$output"
+  ;;
+esac

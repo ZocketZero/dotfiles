@@ -1,0 +1,9 @@
+if [ -f ./package-lock.json ]; then
+    echo npm
+elif [ -f ./pnpm-lock.yaml ];then
+    echo pnpm
+elif [ -f ./bun.lock ];then
+    echo bun
+elif [ -f ./deno.lock ];then
+    echo deno
+fi

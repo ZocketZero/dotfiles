@@ -1,0 +1,22 @@
+#!/usr/bin/ruby
+
+if ARGV.length < 2
+  puts 'too less arguments'
+  puts 'getl <num-line> <path-to-file>'
+  exit 0
+end
+
+line = ARGV[0].dup.to_i
+path = ARGV[1].dup
+
+file = File.open path
+if line >= 0
+  line.times { file.gets }
+  if $_
+    printf $_.chomp
+  else
+    exit 1
+  end
+else
+  puts 'invalid line number'
+end

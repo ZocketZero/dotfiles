@@ -1,0 +1,10 @@
+[user]
+	name = Nawasan Wisitsingkhon
+	email = zocketzero@proton.me
+	signingkey = zocketzero@proton.me
+[init]
+	defaultBranch = main
+[core]
+	editor = vim
+[commit]
+	gpgsign = true

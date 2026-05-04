@@ -1,0 +1,50 @@
+#!/usr/bin/zsh
+# This program will open files randomly.
+
+# Print help message.
+if [[ "$1" == "-h" ]];then
+    echo 'Usage command [option]';
+    echo \`"$0" -h\` print help message;
+    echo \`"$0" 'media` to random all media files (image and video)';
+    echo \`"$0" image\` to random only image files;
+    echo \`"$0" video\` to random only video files;
+    echo \`"$0"\` without option to random all files;
+    exit
+
+# open images and videos ramdomly.
+elif [[ "$1" == "m" || "$1" == "media" ]];then
+    all_file=$(find . -regextype posix-egrep -iregex ".*\.(jpg|png|jpeg|webp|mp4|m4a|mov|avi|mpeg|gif)")
+
+# open videos randomly.
+elif [[ "$1" == "video" || "$1" == "v" ]];then
+    all_file=$(find . -regextype posix-egrep -iregex ".*\.(mp4|mov|avi|mpeg|gif)")
+
+# open image randomly.
+elif [[ "$1" == "image" || "$1" == "i" ]];then
+    all_file=$(find . -regextype posix-egrep -iregex ".*\.(jpg|png|jpeg|webp)")
+
+# open file randomly.
+elif [[ "$1" == "" ]];then
+    all_file=$(find . -type f)
+
+# only specific file extension
+else
+    all_file=$(find . -regextype posix-egrep -iregex ".*\.($@)")
+fi
+
+if [[ "$all_file" == "" ]];then
+    echo not found any file;
+    exit 1;
+fi
+
+# If found only one file, just open it.
+if [[ "$(echo $all_file | wc -l )" == "1" ]];then
+    open "$(echo $all_file)";
+    exit;
+fi
+
+# Found more than one file, open randomly.
+file="$(getl $(shuf -i 1-$(echo -n $all_file | wc -l) -n 1) <(echo -n $all_file))"
+echo $file;
+open $file;
+

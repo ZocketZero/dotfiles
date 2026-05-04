@@ -1,0 +1,45 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# Path to your oh-my-zsh installation.
+export ZSH="$HOME/.oh-my-zsh"
+
+# ZSH_THEME="amuse" # 2 rows (path, git branch, time) no-print-error
+# ZSH_THEME="dst" # 2 rows (user@host, path, git branch, :[right] time) print-error-as-[message]
+# ZSH_THEME="af-magic" # 1 row and line print-error-as-[number]
+# ---
+# ZSH_THEME="bira" # 2 rows (user@host, path, git branch) line-connect-rows print-error-as-[number]
+# ZSH_THEME="kphoen" # 2 rows (user@host, path, git branch) line-connect-rows print-error-as-[number]
+# ZSH_THEME="zero"
+ZSH_THEME="powerlevel10k/powerlevel10k"
+
+
+fpath=($HOME/.oh-my-zsh/custom/plugins/zsh-completions/src $fpath)
+
+plugins=(git
+    zsh-autosuggestions
+    zsh-syntax-highlighting
+    command-not-found
+)
+
+source $ZSH/oh-my-zsh.sh
+
+PROMPT_EOL_MARK=""
+
+export PATH=$PATH:/sbin/:$HOME/bin:$HOME/.cargo/bin:$HOME/go/bin
+
+# include all files in '.zshrc.d' directory
+for file in $HOME/.zshrc.d/*; do
+. $file;
+done
+
+if command -v mise > /dev/null;then
+   eval "$(mise activate zsh)"; 
+fi
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
