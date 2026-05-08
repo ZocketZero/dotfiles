@@ -5,9 +5,9 @@ alias psn='ps -o user,pid,ni,stat,start,time,cmd'
 alias y='yes'
 lss() {
     if [[ "$@" == "" ]];then
-        du -hd 0 * 2> /dev/null | sort -h
+        du -hd 0 -- * 2> /dev/null | sort -h
     else
-        du -hd 0 "$@" 2> /dev/null | sort -h
+        du -hd 0 -- "$@" 2> /dev/null | sort -h
     fi
 }
 
@@ -49,7 +49,7 @@ if [[ "$is_nu_exist" != "" ]];then
 else
   lsd () {
     if [[ "$1" == "" ]]; then
-      du -sh * | sort -h
+      du -sh -- * | sort -h
     else
       du -sh $1 | sort -h
     fi
@@ -63,5 +63,14 @@ dud() {
   else
     du -hd 0 "$@" 2>/dev/null
   fi
+}
+
+# this command help run any command multiple times
+# example: loop 10 ping 1.1.1.1 -c 1
+loop () {
+	for i in {1..$1}
+	do
+		"${@:2}"
+	done
 }
 
