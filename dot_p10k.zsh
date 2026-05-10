@@ -40,6 +40,13 @@
     # prompt_char           # prompt symbol
   )
 
+function prompt_uv_python() {
+  if [[ -n $UV_VIRTUAL_ENV || -d .venv || -d "venv" || -n *.py(#qN) ]]; then
+    local version=$(python --version 2>/dev/null | cut -d' ' -f2)
+    p10k segment -f 74 -i '󱔎' -t "$version"
+  fi
+}
+
   # The list of segments shown on the right. Fill it with less important segments.
   # Right prompt on the last prompt line (where you are typing your commands) gets
   # automatically hidden when the input line reaches it. Right prompt above the
@@ -56,16 +63,18 @@
     pyenv                   # python environment (https://github.com/pyenv/pyenv)
     goenv                   # go environment (https://github.com/syndbg/goenv)
     nodenv                  # node.js version from nodenv (https://github.com/nodenv/nodenv)
+    python
+    uv_python
     nvm                     # node.js version from nvm (https://github.com/nvm-sh/nvm)
     nodeenv                 # node.js environment (https://github.com/ekalinin/nodeenv)
-    # node_version          # node.js version
-    # go_version            # go version (https://golang.org)
-    # rust_version          # rustc version (https://www.rust-lang.org)
-    # dotnet_version        # .NET version (https://dotnet.microsoft.com)
-    # php_version           # php version (https://www.php.net/)
-    # laravel_version       # laravel php framework version (https://laravel.com/)
-    # java_version          # java version (https://www.java.com/)
-    # package               # name@version from package.json (https://docs.npmjs.com/files/package.json)
+    node_version          # node.js version
+    go_version            # go version (https://golang.org)
+    rust_version          # rustc version (https://www.rust-lang.org)
+    dotnet_version        # .NET version (https://dotnet.microsoft.com)
+    php_version           # php version (https://www.php.net/)
+    laravel_version       # laravel php framework version (https://laravel.com/)
+    java_version          # java version (https://www.java.com/)
+    package               # name@version from package.json (https://docs.npmjs.com/files/package.json)
     rbenv                   # ruby version from rbenv (https://github.com/rbenv/rbenv)
     rvm                     # ruby version from rvm (https://rvm.io)
     fvm                     # flutter version management (https://github.com/leoafarias/fvm)
@@ -107,11 +116,11 @@
     taskwarrior             # taskwarrior task count (https://taskwarrior.org/)
     per_directory_history   # Oh My Zsh per-directory-history local/global indicator
     # cpu_arch              # CPU architecture
-    time                    # current time
+    # time                    # current time
     # =========================[ Line #2 ]=========================
-    newline
+    # newline
     # ip                    # ip address and bandwidth usage for a specified network interface
-    # public_ip             # public IP address
+    public_ip             # public IP address
     # proxy                 # system-wide http/https/ftp proxy
     # battery               # internal battery
     # wifi                  # wifi speed
