@@ -51,10 +51,20 @@
     "format-disconnected": "  Offline"
   },
   "cpu": {
+    "interval": 1,
     "format": "  {usage}%"
   },
   "memory": {
-    "format": "  {used}MB"
+    "interval": 1, // High frequency polling for monitoring memory leaks/pressure
+    "format": " {percentage}%", // Percentage of used RAM
+    "format-alt": "󰍛 {used:0.1f}G/{total:0.1f}G", // Gigabytes used (Toggle with click)
+    "states": {
+      "warning": 70,
+      "critical": 90
+    },
+    "tooltip": true,
+    "tooltip-format": "Used: {used}GiB\nAvailable: {avail}GiB\nTotal: {total}GiB\nSwap: {swapUsed}GiB/{swapTotal}GiB",
+    "on-click": "alacritty -e htop" // Launch system monitor on click
   },
   "clock": {
     "format": "{:%H:%M:%S}",
