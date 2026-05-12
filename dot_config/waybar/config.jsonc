@@ -12,6 +12,7 @@
   ],
   "modules-right": [
     "pulseaudio",
+    "backlight",
     "cpu",
     "memory",
     "network",
@@ -23,6 +24,24 @@
     "format": "{name}",
     "on-click": "activate",
     "all-outputs": true
+  },
+  "backlight": {
+    "device": "intel_backlight",
+    "format": "{percent}% {icon}",
+    "format-icons": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "on-scroll-up": "brightnessctl set 1%+",
+    "on-scroll-down": "brightnessctl set 1%-",
+    "min-length": 6
   },
   "pulseaudio": {
     "format": "{icon} {volume}% {format_source}",
