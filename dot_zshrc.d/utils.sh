@@ -30,31 +30,19 @@ lpod() {
   done
 }
 
-is_nu_exist=$(command -v nu 2> /dev/null);
-
-
 lst() {
-  if [[ "$is_nu_exist" != "" ]];then
-    nu -c 'ls | sort-by modified | print'
-  else
     ls -tr "$@"
-  fi
 }
+
 # Disk utils
 # using nu command for ls.
-if [[ "$is_nu_exist" != "" ]];then
-   lsd() {
-        nu -c "ls -da | sort-by size | print"
-    }
-else
-  lsd () {
+lsd () {
     if [[ "$1" == "" ]]; then
-      du -sh -- * | sort -h
+        du -sh -- * | sort -h
     else
-      du -sh $1 | sort -h
+        du -sh $1 | sort -h
     fi
-  }
-fi
+}
 
 # alias dud='du -hd 0 '
 dud() {
