@@ -1,33 +1,61 @@
-## Dotfiles
+# Dotfiles
 
-I currently learn and try to understand what is dotfiles manager. I have saw dotfiles repo in many account on github. I think it interesting and I want to understand it.
+Personal dotfiles managed with [chezmoi](https://www.chezmoi.io/). This repository contains configurations for a productive Linux environment, focusing on Zsh, Neovim, and Hyprland.
 
-### Get started
+## 🚀 Quick Start
 
-#### Install chezmoi and apply Dotfiles with script 
+To initialize and apply these dotfiles on a new machine:
 
 ```bash
 sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply ZocketZero
 ```
-#### Or install before and apply after.
 
-- install `chezmoi` at [https://www.chezmoi.io/install/](https://www.chezmoi.io/install/)
-- command to apply dotfiles from github repo
+Alternatively, if you already have `chezmoi` installed:
 
 ```bash
 chezmoi init --apply ZocketZero
 ```
 
-### Applications
+## 🛠 Core Components
 
-- nvim
-    - LazyVim
-- oh-my-zsh 
-    - extensions
-    - theme
-- nvm (install with bash script)
-- packages with apt
+### Shell & Terminal
+- **Shell**: `zsh` as the primary shell, with `nushell` and `bash` also configured.
+- **Framework**: [Oh My Zsh](https://ohmyz.sh/) with plugins (`zsh-completions`, `zsh-autosuggestions`, `zsh-syntax-highlighting`).
+- **Prompt**: [Powerlevel10k](https://github.com/romkatv/powerlevel10k) and [Starship](https://starship.rs/).
+- **Terminal**: [Kitty](https://sw.kovidgoyal.net/kitty/) with custom themes.
 
-### TODOs
+### Text Editors
+- **Neovim**: Configured with [LazyVim](https://www.lazyvim.org/) for a full-featured IDE experience.
+- **Vim**: Basic configuration for quick edits.
 
-- [ ] I want it autoinstall programs I using (nvm, nodejs, rust, others). 
+### Desktop Environment (Wayland)
+- **Window Manager**: [Hyprland](https://hyprland.org/).
+- **Status Bar**: [Waybar](https://github.com/Alexays/Waybar).
+- **Locker**: Hyprlock.
+
+## 📦 Automation & Scripts
+
+The `bin/` directory contains several utility and initialization scripts:
+
+### Initialization Scripts
+- `executable_init:apt-packages.sh`: Automates the installation of essential packages via `apt` (Rust, Go, Neovim, etc.).
+- `executable_init:cloudflare-warp.sh`: Sets up Cloudflare WARP.
+
+### Utility Scripts
+- `cffmpeg`: Custom FFmpeg wrapper.
+- `cpm`: Custom package management utility.
+- `getl`: Utility for fetching logs or links.
+- `ropen`: Script to open files/folders.
+
+## 📂 Structure
+
+- `dot_config/`: XDG configuration files (Hyprland, Kitty, Neovim, Starship, etc.).
+- `dot_zshrc.d/`: Modular Zsh configuration files (aliases, utility functions).
+- `bin/`: Custom scripts and binaries.
+
+## ✨ Features
+
+- **Modular Zsh**: Configuration is split into `utils.sh` and other modular scripts for better maintainability.
+- **Auto-Installation**: Initialization scripts help bootstrap a new system quickly.
+- **Cross-Shell Aliases**: Common aliases shared across shells.
+
