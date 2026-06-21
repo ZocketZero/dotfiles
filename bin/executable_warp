@@ -1,0 +1,55 @@
+#!/usr/bin/python
+
+import argparse
+import subprocess
+
+argparser = argparse.ArgumentParser()
+
+sub_parser = argparser.add_subparsers(dest="command")
+sub_parser.add_parser("status", help="print status")
+sub_parser.add_parser("doh", help="connect to doh mode")
+sub_parser.add_parser("warp", help="connect to warp mode")
+
+sub_parser.add_parser("connect", help="turn on connection to warp-cli", aliases=["c"])
+sub_parser.add_parser(
+    "disconnect", help="turn off connection to warp-cli", aliases=["d"]
+)
+
+
+def status():
+    subprocess.run(["warp-cli", "status"])
+    subprocess.run("warp-cli settings | grep Mode", shell=True)
+
+
+def change_mode(mode: str):
+    subprocess.run(["warp-cli", "mode", mode])
+
+
+def turn_on():
+    subprocess.run(["warp-cli", "connect"])
+
+
+def turn_off():
+    subprocess.run(["warp-cli", "disconnect"])
+
+
+if __name__ == "__main__":
+    args = argparser.parse_args()
+
+    match args.command:
+        case "status":
+            status()
+        case "doh":
+            change_mode("doh")
+        case "warp":
+            change_mode("warp")
+        case "connect":
+            turn_on()
+        case "c":
+            turn_on()
+        case "disconnect":
+            turn_off()
+        case "d":
+            turn_off()
+        case _:
+            status()
