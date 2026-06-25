@@ -1,2 +1,0 @@
-#!/usr/bin/bash
-"${@:1}" "$(cat /dev/stdin)"

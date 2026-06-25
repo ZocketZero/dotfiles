@@ -1,0 +1,21 @@
+#!/usr/bin/bash
+
+echo $@
+
+argv=()
+found=0
+for a in "$@";do
+    if [[ "$a" == ":in" ]];then
+        argv+=("$(cat /dev/stdin)")
+        found=1
+    else
+        argv+=( "$a" )
+    fi
+done
+
+if [ $found -eq 1 ];then
+    "${argv[@]}"
+else
+    "${argv[@]}" "$(cat /dev/stdin)"
+fi
+
