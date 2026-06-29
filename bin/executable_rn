@@ -1,7 +1,5 @@
 #!/usr/bin/bash
 
-echo $@
-
 argv=()
 found=0
 for a in "$@";do
