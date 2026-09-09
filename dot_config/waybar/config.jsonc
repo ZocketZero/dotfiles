@@ -1,8 +1,9 @@
 {
   "layer": "top", // Wayland layer-shell (top/bottom)
-  "position": "top", // Screen edge placement
+  "position": "bottom", // Screen edge placement
   "height": 30, // Pixel height (leave blank for dynamic)
   "spacing": 4, // Gaps between modules
+  "start_hidden": true,
   "modules-left": [
     "hyprland/workspaces",
     "hyprland/mode"
@@ -11,6 +12,8 @@
     "hyprland/window"
   ],
   "modules-right": [
+    "custom/vpn-status",
+    "custom/vpn-mode",
     "pulseaudio",
     "backlight",
     "cpu",
@@ -46,7 +49,7 @@
   "pulseaudio": {
     "format": "{icon} {volume}% {format_source}",
     "format-bluetooth": "{icon} {volume}% {format_source}",
-    "format-muted": " {format_source}",
+    "format-muted": "🔇 {format_source}",
     "format-source": " {volume}%",
     "format-source-muted": "",
     "format-icons": {
@@ -89,5 +92,15 @@
     "format": "{:%H:%M:%S}",
     "interval": 1,
     "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
+  },
+  "custom/vpn-mode": {
+    "format": "{}",
+    "interval": 5,
+    "exec": "warp-cli settings|grep Mode| awk '{print $NF}'"
+  },
+  "custom/vpn-status": {
+    "format": "{}:",
+    "interval": 5,
+    "exec": "warp-cli status|grep 'Status'|awk '{print $NF}'"
   }
 }
