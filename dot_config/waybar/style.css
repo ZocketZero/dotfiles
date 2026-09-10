@@ -3,6 +3,7 @@
     border-radius: 0;
     font-family: "JetBrainsMono Nerd Font";
     font-size: 13px;
+  background-color: black;
 }
 
 window#waybar {
