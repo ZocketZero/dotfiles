@@ -17,16 +17,16 @@ local fileManager = "xdg-open ~"
 local menu = "hyprlauncher"
 
 hl.monitor({
-    output   = "eDP-1",
-    mode     = "preferred",
-    position = "auto",
-    scale    = 1.0,
+	output = "eDP-1",
+	mode = "preferred",
+	position = "auto",
+	scale = 1.0,
 })
 
 hl.config({
-    xwayland = {
-        force_zero_scaling = true,
-    },
+	xwayland = {
+		force_zero_scaling = true,
+	},
 })
 
 -- Qt (OBS, KeepassXC, VLC)
@@ -62,34 +62,34 @@ hl.env("HYPRCURSOR_SIZE", 24)
 -- env = QT_SCALE_FACTOR,1.4
 
 hl.config({
-    input = {
-        kb_layout = "us,th",
-        kb_variant = ",mnc",
-        kb_options = "grp:win_space_toggle",
-        -- สลับภาษาด้วย Super + Space
-        follow_mouse = 1,
-        numlock_by_default = true,
-        resolve_binds_by_sym = true,
-        sensitivity = 0.5,
-        mouse_refocus = true,
-        touchpad = {
-            natural_scroll = true,
-        },
-    },
+	input = {
+		kb_layout = "us,th",
+		kb_variant = ",mnc",
+		kb_options = "grp:win_space_toggle",
+		-- สลับภาษาด้วย Super + Space
+		follow_mouse = 1,
+		numlock_by_default = true,
+		resolve_binds_by_sym = true,
+		sensitivity = 0.5,
+		mouse_refocus = true,
+		touchpad = {
+			natural_scroll = true,
+		},
+	},
 })
 
 hl.device({
-    name = "semico---usb-gaming-keyboard-",
-    kb_layout = "us,th",
-    kb_options = "grp:win_space_toggle",
+	name = "semico---usb-gaming-keyboard-",
+	kb_layout = "us,th",
+	kb_options = "grp:win_space_toggle",
 })
 
 -- ใส่ไว้นอกบล็อก input
 
 hl.device({
-    name = "at-translated-set-2-keyboard",
-    kb_layout = "us,th",
-    kb_options = "grp:win_space_toggle",
+	name = "at-translated-set-2-keyboard",
+	kb_layout = "us,th",
+	kb_options = "grp:win_space_toggle",
 })
 
 -- Volume control
@@ -112,21 +112,18 @@ hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. 0, hl.dsp.exec_cmd("wpctl set-mu
 
 -- on off
 
-hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "equal", hl.dsp.exec_cmd("wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SOURCE@ 5%+"))
+hl.bind(
+	mainMod .. " + " .. "SHIFT" .. " + " .. "equal",
+	hl.dsp.exec_cmd("wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SOURCE@ 5%+")
+)
 
 hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "minus", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%-"))
-
-
-
 
 -- mute Microphone by default.
 
 -- exec-once = thunderbird
 
-
 -- mako-notifier
-
-
 
 -- bind = $mainMod, V, exec, cliphist list | wofi --dmenu | cliphist decode | wl-copy
 
@@ -149,79 +146,79 @@ hl.env("XCURSOR_SIZE", 24)
 hl.env("HYPRCURSOR_SIZE", 24)
 
 hl.config({
-    general = {
-        gaps_in = 0,
-        gaps_out = 0,
-        border_size = 0,
-        -- https://wiki.hypr.land/Configuring/Variables/#variable-types for info about colors
-        --rgba(00ff99ee) 45deg
-        -- col.active_border = rgba(33ccffee) rgba(00ff99ee) 45deg
-        -- col.active_border = rgba(33ccffee) rgba(00ff99ee) 45deg
-        -- Set to true enable resizing windows by clicking and dragging on borders and gaps
-        resize_on_border = false,
-        -- Please see https://wiki.hypr.land/Configuring/Tearing/ before you turn this on
-        allow_tearing = false,
-        layout = "dwindle",
-        col = {
-            active_border = "rgba(f0ffff80)",
-            inactive_border = "rgba(595959aa)",
-        },
-    },
+	general = {
+		gaps_in = 0,
+		gaps_out = 0,
+		border_size = 0,
+		-- https://wiki.hypr.land/Configuring/Variables/#variable-types for info about colors
+		--rgba(00ff99ee) 45deg
+		-- col.active_border = rgba(33ccffee) rgba(00ff99ee) 45deg
+		-- col.active_border = rgba(33ccffee) rgba(00ff99ee) 45deg
+		-- Set to true enable resizing windows by clicking and dragging on borders and gaps
+		resize_on_border = false,
+		-- Please see https://wiki.hypr.land/Configuring/Tearing/ before you turn this on
+		allow_tearing = false,
+		layout = "dwindle",
+		col = {
+			active_border = "rgba(f0ffff80)",
+			inactive_border = "rgba(595959aa)",
+		},
+	},
 })
 
 -- https://wiki.hypr.land/Configuring/Variables/#decoration
 
 hl.config({
-    decoration = {
-        rounding = 10,
-        rounding_power = 2,
-        -- Change transparency of focused and unfocused windows
-        active_opacity = 1.0,
-        inactive_opacity = 1.0,
-        shadow = {
-            enabled = true,
-            range = 4,
-            render_power = 3,
-            color = "rgba(1a1a1aee)",
-        },
-        -- https://wiki.hypr.land/Configuring/Variables/#blur
-        blur = {
-            enabled = true,
-            size = 3,
-            passes = 1,
-            vibrancy = 0.1696,
-        },
-    },
+	decoration = {
+		rounding = 10,
+		rounding_power = 2,
+		-- Change transparency of focused and unfocused windows
+		active_opacity = 1.0,
+		inactive_opacity = 1.0,
+		shadow = {
+			enabled = true,
+			range = 4,
+			render_power = 3,
+			color = "rgba(1a1a1aee)",
+		},
+		-- https://wiki.hypr.land/Configuring/Variables/#blur
+		blur = {
+			enabled = true,
+			size = 3,
+			passes = 1,
+			vibrancy = 0.1696,
+		},
+	},
 })
 
 hl.config({
-    animations = {
-        enabled = true,
-        -- Default curves, see https://wiki.hypr.land/Configuring/Animations/#curves
-        --        NAME,           X0,   Y0,   X1,   Y1
-        -- Default animations, see https://wiki.hypr.land/Configuring/Animations/
-        --           NAME,          ONOFF, SPEED, CURVE,        [STYLE]
-    },
+	animations = {
+		enabled = true,
+		-- Default curves, see https://wiki.hypr.land/Configuring/Animations/#curves
+		--        NAME,           X0,   Y0,   X1,   Y1
+		-- Default animations, see https://wiki.hypr.land/Configuring/Animations/
+		--           NAME,          ONOFF, SPEED, CURVE,        [STYLE]
+	},
 })
 hl.curve("easeOutQuint", {
-    type = "bezier",
-    points = { { 0.23, 1 }, { 0.32, 1 } },
+	type = "bezier",
+	points = { { 0.23, 1 }, { 0.32, 1 } },
 })
 hl.curve("easeInOutCubic", {
-    type = "bezier",
-    points = { { 0.65, 0.05 }, { 0.36, 1 } },
+	type = "bezier",
+	points = { { 0.65, 0.05 }, { 0.36, 1 } },
 })
 hl.curve("linear", {
-    type = "bezier",
-    points = { { 0, 0 }, { 1, 1 } },
+	type = "bezier",
+	points = { { 0, 0 }, { 1, 1 } },
 })
 hl.curve("almostLinear", {
-    type = "bezier",
-    points = { { 0.5, 0.5 }, { 0.75, 1 } },
+	type = "bezier",
+	points = { { 0.5, 0.5 }, { 0.75, 1 } },
 })
 hl.curve("quick", {
-    type = "bezier",
-    points = { { 0.15, 0 }, { 0.1, 1 } },
+	type = "bezier",
+	points = { { 0.15, 0 }, { 0.1, 1 } },
 })
 hl.animation({ leaf = "global", enabled = true, speed = 10, bezier = "default" })
 hl.animation({ leaf = "border", enabled = true, speed = 5.39, bezier = "easeOutQuint" })
@@ -288,43 +285,43 @@ hl.animation({ leaf = "zoomFactor", enabled = true, speed = 7, bezier = "quick" 
 -- See https://wiki.hypr.land/Configuring/Dwindle-Layout/ for more
 
 hl.config({
-    dwindle = {
-        -- pseudotile = true # Master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
-        preserve_split = true,
-        -- You probably want this
-    },
+	dwindle = {
+		-- pseudotile = true # Master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
+		preserve_split = true,
+		-- You probably want this
+	},
 })
 
 -- See https://wiki.hypr.land/Configuring/Master-Layout/ for more
 
 hl.config({
-    master = {
-        new_status = "master",
-    },
+	master = {
+		new_status = "master",
+	},
 })
 
 -- https://wiki.hypr.land/Configuring/Variables/#misc
 
 hl.config({
-    misc = {
-        force_default_wallpaper = -1,
-        -- Set to 0 or 1 to disable the anime mascot wallpapers
-        disable_hyprland_logo = true,
-        -- If true disables the random hyprland logo / anime girl background. :(
-        disable_splash_rendering = true,
-        -- Hide random qoutes
-    },
+	misc = {
+		force_default_wallpaper = -1,
+		-- Set to 0 or 1 to disable the anime mascot wallpapers
+		disable_hyprland_logo = true,
+		-- If true disables the random hyprland logo / anime girl background. :(
+		disable_splash_rendering = true,
+		-- Hide random qoutes
+	},
 })
 
 hl.gesture({
-    ["fingers"] = 3,
-    ["direction"] = "horizontal",
-    ["action"] = "workspace",
+	["fingers"] = 3,
+	["direction"] = "horizontal",
+	["action"] = "workspace",
 })
 
 hl.device({
-    name = "epic-mouse-v1",
-    sensitivity = -0.5,
+	name = "epic-mouse-v1",
+	sensitivity = -0.5,
 })
 
 --##################
@@ -377,13 +374,16 @@ hl.bind(mainMod .. " + " .. "Tab", hl.dsp.window.cycle_next())
 
 hl.bind(mainMod .. " + " .. "Y", hl.dsp.exec_cmd("grim - | wl-copy"))
 
-hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "Y", hl.dsp.exec_cmd("grim -g \"$(slurp)\" - | wl-copy"))
+hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "Y", hl.dsp.exec_cmd('grim -g "$(slurp)" - | wl-copy'))
 
 -- bind = $mainMod SHIFT, S, exec, grim -g "$(slurp)" - | wl-copy
 
 hl.bind(mainMod .. " + " .. "U", hl.dsp.exec_cmd("grim ~/Pictures/Screenshots/$(date +'%Y-%m-%d_%H-%M-%S').png"))
 
-hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. "U", hl.dsp.exec_cmd("grim -g \"$(slurp)\" ~/Pictures/Screenshots/$(date +'%Y-%m-%d_%H-%M-%S').png"))
+hl.bind(
+	mainMod .. " + " .. "SHIFT" .. " + " .. "U",
+	hl.dsp.exec_cmd("grim -g \"$(slurp)\" ~/Pictures/Screenshots/$(date +'%Y-%m-%d_%H-%M-%S').png")
+)
 
 hl.bind(mainMod .. " + " .. "left", hl.dsp.focus({ direction = "left" }))
 
@@ -416,19 +416,21 @@ hl.bind("ALT + SHIFT + Tab", hl.dsp.group.prev())
 -- b = backward (ย้อนกลับ)
 
 hl.config({
-    group = {
-        insert_after_current = true,
-        focus_removed_window = true,
-        groupbar = {
-            height = 1,
-            gaps_in = 10,
-            font_size = 10,
-            gradients = true,
-            render_titles = false,
-            ["col.active"] = "rgba(00000000)",
-            ["col.inactive"] = "rgba(ffffff7f)",
-        },
-    },
+	group = {
+		insert_after_current = true,
+		focus_removed_window = true,
+		groupbar = {
+			height = 1,
+			gaps_in = 10,
+			font_size = 10,
+			gradients = true,
+			render_titles = false,
+			col = {
+				active = "rgba(000000ff)",
+				inactive = "rgba(ffffff7f)",
+			},
+		},
+	},
 })
 
 --######### Default config ##########
@@ -482,11 +484,11 @@ hl.bind(mainMod .. " + " .. "SHIFT" .. " + " .. 9, hl.dsp.window.move({ workspac
 -- bind = $mainMod SHIFT, 0, movetoworkspace, 10
 
 hl.window_rule({
-    name  = "add-new-window-to-group",
-    match = {
-        class = ".*",
-    },
-    group = "set",
+	name = "add-new-window-to-group",
+	match = {
+		class = ".*",
+	},
+	group = "set",
 })
 
 -- Example special workspace (scratchpad)
@@ -532,35 +534,35 @@ hl.bind("XF86AudioPlay", hl.dsp.exec_cmd("playerctl play-pause"), { locked = tru
 hl.bind("XF86AudioPrev", hl.dsp.exec_cmd("playerctl previous"), { locked = true })
 
 hl.window_rule({
-    name  = "fix-xwayland-drags",
-    match = {
-        class = "^$",
-        title = "^$",
-        xwayland = true,
-        float = true,
-        fullscreen = false,
-        pin = false,
-    },
-    no_focus = true,
+	name = "fix-xwayland-drags",
+	match = {
+		class = "^$",
+		title = "^$",
+		xwayland = true,
+		float = true,
+		fullscreen = false,
+		pin = false,
+	},
+	no_focus = true,
 })
 
 -- Hyprland-run windowrule
 
 hl.window_rule({
-    name  = "move-hyprland-run",
-    match = {
-        class = "hyprland-run",
-    },
-    move = { 20, "monitor_h-120" },
-    float = true,
+	name = "move-hyprland-run",
+	match = {
+		class = "hyprland-run",
+	},
+	move = { 20, "monitor_h-120" },
+	float = true,
 })
 
 -- Autostart
 hl.on("hyprland.start", function()
-    hl.exec_cmd("waybar")
-    hl.exec_cmd("hyprpaper")
-    hl.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ 1")
-    hl.exec_cmd("mako")
-    hl.exec_cmd("wl-paste --type text --watch cliphist store")
-    hl.exec_cmd("wl-paste --type image --watch cliphist store")
+	hl.exec_cmd("waybar")
+	hl.exec_cmd("hyprpaper")
+	hl.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ 1")
+	hl.exec_cmd("mako")
+	hl.exec_cmd("wl-paste --type text --watch cliphist store")
+	hl.exec_cmd("wl-paste --type image --watch cliphist store")
 end)
