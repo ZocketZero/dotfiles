@@ -13,7 +13,7 @@ fi
 
 case $code in
 av1)
-  ffmpeg -i "$input" -c:v libsvtav1 -c:a libopus "$output"
+  ffmpeg -i "$input" -c:v libsvtav1 "$output"
   ;;
 h265)
   ffmpeg -i "$input" -c:v libx265 "$input"

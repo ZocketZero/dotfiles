@@ -7,8 +7,8 @@ argparser = argparse.ArgumentParser()
 
 sub_parser = argparser.add_subparsers(dest="command")
 sub_parser.add_parser("status", help="print status")
-sub_parser.add_parser("doh", help="connect to doh mode")
-sub_parser.add_parser("warp", help="connect to warp mode")
+sub_parser.add_parser("doh", help="connect to doh mode", aliases=['h'])
+sub_parser.add_parser("warp", help="connect to warp mode", aliases=['w'])
 
 sub_parser.add_parser("connect", help="turn on connection to warp-cli", aliases=["c"])
 sub_parser.add_parser(
@@ -35,21 +35,17 @@ def turn_off():
 
 if __name__ == "__main__":
     args = argparser.parse_args()
+    cmd = args.command
 
-    match args.command:
-        case "status":
-            status()
-        case "doh":
-            change_mode("doh")
-        case "warp":
-            change_mode("warp")
-        case "connect":
-            turn_on()
-        case "c":
-            turn_on()
-        case "disconnect":
-            turn_off()
-        case "d":
-            turn_off()
-        case _:
-            status()
+    if cmd in ["status", "s"]:
+        status()
+    elif cmd in ["doh", "h"]:
+        change_mode("doh")
+    elif cmd in ["warp", "w"]:
+        change_mode("warp+doh")
+    elif cmd in ["connnect", "c"]:
+        turn_on()
+    elif cmd in ["disconnect", "d"]:
+        turn_off()
+    else:
+        status()
