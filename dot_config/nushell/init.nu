@@ -9,7 +9,7 @@ def "setup mise" [] {
 
 # install needed software by mise
 def "setup mise install-needed" [] {
-[usage "node@24" python deno bun rust-analyzer uv zig carapace starship] | each {mise use -g $in | complete  }
+[usage "node@24" python deno bun rust-analyzer uv zig carapace starship] | each {mise use -g $in ; 0  }
 }
 
 # generate starship script to nu.d directory
@@ -44,7 +44,7 @@ def "setup extrepo" [] {
     return;
   }
   ["mise" "breave_release" "docker-ce" "github-cli" "librewolf" "mozilla" "protonvpn" "vscode"]
-  | each {mise use -g $in | complete  }
+  | each {sudo extrepo enable $in | complete  }
 
 }
 
