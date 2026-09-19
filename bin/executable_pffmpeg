@@ -1,0 +1,494 @@
+#!/usr/bin/env python3
+"""
+ffprogress - run ffmpeg with a live progress bar.
+
+Standard library only. Works by asking ffmpeg for machine-readable progress
+(`-progress pipe:1`) and by probing the input duration with ffprobe (falling
+back to parsing ffmpeg's own "Duration:" banner if ffprobe is missing).
+
+Usage:
+    ffprogress.py -i input.mp4 -c:v libx264 -crf 20 output.mkv
+    ffprogress.py --ascii -i in.mov -t 30 out.mp4
+    ffprogress.py --ffmpeg /usr/local/bin/ffmpeg -i in.mkv out.webm
+
+Any argument that isn't one of ffprogress's own flags is forwarded to ffmpeg
+untouched. Use `--` to stop flag parsing if an ffmpeg argument collides.
+
+Exit code is ffmpeg's exit code.
+"""
+
+from __future__ import annotations
+
+import json
+import os
+import re
+import shutil
+import signal
+import subprocess
+import sys
+import threading
+import time
+from collections import deque
+
+__all__ = ["run", "ProgressBar", "estimate_duration"]
+
+# Keys emitted by `ffmpeg -progress`.
+PROGRESS_KEYS = {
+    "frame", "fps", "stream_0_0_q", "bitrate", "total_size", "out_time_us",
+    "out_time_ms", "out_time", "dup_frames", "drop_frames", "speed", "progress",
+}
+
+BLOCKS = " \u258f\u258e\u258d\u258c\u258b\u258a\u2589\u2588"  # 1/8th steps
+FULL, EMPTY = "\u2588", "\u2500"
+
+
+# --------------------------------------------------------------------------- #
+# helpers
+# --------------------------------------------------------------------------- #
+
+def parse_time(value):
+    """Parse an ffmpeg time spec into seconds. Returns None if unparseable."""
+    if value is None:
+        return None
+    s = str(value).strip()
+    if not s or s.upper() == "N/A":
+        return None
+    sign = 1.0
+    if s[0] in "+-":
+        sign = -1.0 if s[0] == "-" else 1.0
+        s = s[1:]
+    if ":" in s:
+        parts = s.split(":")
+        if len(parts) > 3:
+            return None
+        try:
+            total = 0.0
+            for part in parts:
+                total = total * 60.0 + float(part)
+        except ValueError:
+            return None
+        return sign * total
+    m = re.fullmatch(r"(\d+(?:\.\d+)?)(ms|us|s)?", s)
+    if not m:
+        return None
+    num = float(m.group(1))
+    unit = m.group(2)
+    if unit == "ms":
+        num /= 1000.0
+    elif unit == "us":
+        num /= 1_000_000.0
+    return sign * num
+
+
+def fmt_time(seconds):
+    """Seconds -> H:MM:SS (or MM:SS when under an hour)."""
+    if seconds is None or seconds != seconds or seconds < 0:
+        return "--:--"
+    seconds = int(seconds)
+    h, rem = divmod(seconds, 3600)
+    m, s = divmod(rem, 60)
+    return f"{h}:{m:02d}:{s:02d}" if h else f"{m:02d}:{s:02d}"
+
+
+def fmt_size(num_bytes):
+    if not num_bytes:
+        return "0B"
+    units = ["B", "KB", "MB", "GB", "TB"]
+    size = float(num_bytes)
+    for unit in units:
+        if size < 1024 or unit == units[-1]:
+            return f"{size:.0f}{unit}" if unit == "B" else f"{size:.1f}{unit}"
+        size /= 1024
+    return f"{size:.1f}TB"
+
+
+def scan_args(args):
+    """
+    Split ffmpeg arguments into per-input specs and trailing output options.
+
+    Options accumulate until an `-i` is seen; whatever is left over after the
+    last `-i` belongs to the output. That mirrors how ffmpeg itself scopes
+    -ss / -t / -to.
+    """
+    inputs, current = [], {}
+    i, n = 0, len(args)
+    while i < n:
+        arg = args[i]
+        if arg == "-i" and i + 1 < n:
+            current["path"] = args[i + 1]
+            inputs.append(current)
+            current = {}
+            i += 2
+            continue
+        if arg in ("-ss", "-t", "-to") and i + 1 < n:
+            current[arg[1:]] = args[i + 1]
+            i += 2
+            continue
+        i += 1
+    return inputs, current
+
+
+def probe_duration(path, ffprobe="ffprobe"):
+    """Duration of a media file in seconds, via ffprobe. None if unknown."""
+    if not shutil.which(ffprobe):
+        return None
+    cmd = [
+        ffprobe, "-v", "error", "-show_entries", "format=duration",
+        "-print_format", "json", "-i", path,
+    ]
+    try:
+        out = subprocess.run(
+            cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+            stdin=subprocess.DEVNULL, timeout=30,
+        ).stdout
+        return float(json.loads(out)["format"]["duration"])
+    except Exception:
+        return None
+
+
+def probe_duration_ffmpeg(path, ffmpeg="ffmpeg"):
+    """Fallback: read the 'Duration: 00:01:23.45' line off ffmpeg's banner."""
+    try:
+        proc = subprocess.run(
+            [ffmpeg, "-hide_banner", "-i", path],
+            stdout=subprocess.DEVNULL, stderr=subprocess.PIPE,
+            stdin=subprocess.DEVNULL, timeout=30,
+        )
+    except Exception:
+        return None
+    m = re.search(rb"Duration:\s*(\d+:\d+:\d+\.\d+)", proc.stderr)
+    return parse_time(m.group(1).decode()) if m else None
+
+
+def estimate_duration(args, ffmpeg="ffmpeg", ffprobe="ffprobe"):
+    """Best guess at how many seconds of output ffmpeg will produce."""
+    inputs, out_opts = scan_args(args)
+    best = None
+    for spec in inputs:
+        path = spec["path"]
+        if path in ("-", "pipe:", "pipe:0") or re.match(r"^\w+://", path):
+            continue  # stream or network source: no seekable duration
+        dur = probe_duration(path, ffprobe) or probe_duration_ffmpeg(path, ffmpeg)
+        if dur is None:
+            continue
+        to = parse_time(spec.get("to"))
+        if to is not None:
+            dur = min(dur, to)
+        ss = parse_time(spec.get("ss")) or 0.0
+        dur = max(0.0, dur - ss)
+        t = parse_time(spec.get("t"))
+        if t is not None:
+            dur = min(dur, t)
+        best = dur if best is None else max(best, dur)
+
+    for key in ("t", "to"):
+        limit = parse_time(out_opts.get(key))
+        if limit is not None:
+            best = limit if best is None else min(best, limit)
+    return best
+
+
+# --------------------------------------------------------------------------- #
+# progress bar
+# --------------------------------------------------------------------------- #
+
+class ProgressBar:
+    """Single-line, redrawing progress bar. Degrades gracefully off a TTY."""
+
+    def __init__(self, total=None, stream=None, ascii_only=False, min_interval=0.08):
+        self.total = total
+        self.stream = stream or sys.stderr
+        self.tty = self.stream.isatty()
+        self.min_interval = min_interval
+        self.start = time.monotonic()
+        self._last_draw = 0.0
+        self._last_pct_logged = -1
+        self._len = 0
+        self._closed = False
+
+        enc = (getattr(self.stream, "encoding", None) or "").lower()
+        self.ascii = ascii_only or "utf" not in enc
+        if self.tty and not self.ascii:
+            try:
+                BLOCKS.encode(self.stream.encoding)
+            except Exception:
+                self.ascii = True
+
+    # -- drawing ------------------------------------------------------------
+    def _bar(self, fraction, width):
+        if width <= 0:
+            return ""
+        if self.ascii:
+            filled = int(fraction * width)
+            return "#" * filled + "-" * (width - filled)
+        exact = fraction * width
+        filled = int(exact)
+        bar = FULL * filled
+        if filled < width:
+            eighths = int((exact - filled) * 8)
+            bar += BLOCKS[eighths] if eighths else EMPTY
+            bar += EMPTY * (width - len(bar))
+        return bar[:width]
+
+    def update(self, seconds_done, speed=None, size=None, force=False):
+        if self._closed:
+            return
+        now = time.monotonic()
+        if not force and now - self._last_draw < self.min_interval:
+            return
+        self._last_draw = now
+        elapsed = now - self.start
+
+        right = []
+        if self.total:
+            frac = min(max(seconds_done / self.total, 0.0), 1.0)
+            right.append(f"{fmt_time(seconds_done)}/{fmt_time(self.total)}")
+        else:
+            frac = None
+            right.append(fmt_time(seconds_done))
+        if speed:
+            right.append(f"{speed:.2f}x")
+        if size:
+            right.append(fmt_size(size))
+        if self.total:
+            rate = (seconds_done / elapsed) if elapsed > 0.2 else 0.0
+            eta = (self.total - seconds_done) / rate if rate > 0 else None
+            right.append(f"eta {fmt_time(eta)}")
+        else:
+            right.append(f"elapsed {fmt_time(elapsed)}")
+        suffix = "  ".join(right)
+
+        if not self.tty:
+            if frac is not None:
+                pct = int(frac * 100)
+                if pct // 5 > self._last_pct_logged // 5 or force:
+                    self._last_pct_logged = pct
+                    self.stream.write(f"{pct:3d}%  {suffix}\n")
+                    self.stream.flush()
+            return
+
+        width = shutil.get_terminal_size((80, 24)).columns
+        if frac is None:
+            # Indeterminate: bounce a small block back and forth.
+            bar_w = max(10, min(30, width - len(suffix) - 6))
+            pos = int(elapsed * 12) % max(1, (bar_w - 3) * 2)
+            if pos >= bar_w - 3:
+                pos = (bar_w - 3) * 2 - pos
+            cell = "#" if self.ascii else FULL
+            track = "-" if self.ascii else EMPTY
+            body = track * pos + cell * 3 + track * (bar_w - pos - 3)
+            line = f"  [{body}]  {suffix}"
+        else:
+            pct = f"{frac * 100:5.1f}%"
+            bar_w = width - len(pct) - len(suffix) - 6
+            bar_w = max(8, min(bar_w, 60))
+            line = f"{pct} |{self._bar(frac, bar_w)}| {suffix}"
+
+        line = line[: max(0, width - 1)]
+        pad = " " * max(0, self._len - len(line))
+        self.stream.write("\r" + line + pad)
+        self.stream.flush()
+        self._len = len(line)
+
+    def close(self, clear=False):
+        if self._closed:
+            return
+        self._closed = True
+        if not self.tty:
+            return
+        if clear:
+            self.stream.write("\r" + " " * self._len + "\r")
+        else:
+            self.stream.write("\n")
+        self.stream.flush()
+
+    # -- cursor -------------------------------------------------------------
+    def hide_cursor(self):
+        if self.tty:
+            self.stream.write("\x1b[?25l")
+            self.stream.flush()
+
+    def show_cursor(self):
+        if self.tty:
+            self.stream.write("\x1b[?25h")
+            self.stream.flush()
+
+
+# --------------------------------------------------------------------------- #
+# runner
+# --------------------------------------------------------------------------- #
+
+def _output_is_stdout(args):
+    return bool(args) and args[-1] in ("-", "pipe:", "pipe:1")
+
+
+def _build_command(args, ffmpeg, progress_fd):
+    cmd = [ffmpeg, "-hide_banner", "-nostdin"]
+    if not any(a in ("-loglevel", "-v") for a in args):
+        cmd += ["-loglevel", "error"]
+    cmd += ["-nostats", "-progress", progress_fd]
+    return cmd + list(args)
+
+
+def run(args, ffmpeg="ffmpeg", ffprobe="ffprobe", ascii_only=False, total=None):
+    """
+    Run ffmpeg with `args`, drawing a progress bar on stderr.
+    Returns ffmpeg's exit code.
+    """
+    if shutil.which(ffmpeg) is None and not os.path.exists(ffmpeg):
+        print(f"ffprogress: {ffmpeg} not found on PATH", file=sys.stderr)
+        return 127
+
+    if total is None:
+        total = estimate_duration(args, ffmpeg, ffprobe)
+
+    # If ffmpeg is writing the media to stdout, send progress to stderr instead.
+    to_stderr = _output_is_stdout(args)
+    cmd = _build_command(args, ffmpeg, "pipe:2" if to_stderr else "pipe:1")
+
+    proc = subprocess.Popen(
+        cmd,
+        stdin=subprocess.DEVNULL,
+        stdout=None if to_stderr else subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        universal_newlines=True,
+        bufsize=1,
+        errors="replace",
+    )
+    src = proc.stderr if to_stderr else proc.stdout
+    other = None if to_stderr else proc.stderr
+
+    log = deque(maxlen=60)
+    drain = None
+    if other is not None:
+        def _drain():
+            for line in other:
+                log.append(line.rstrip("\n"))
+        drain = threading.Thread(target=_drain, daemon=True)
+        drain.start()
+
+    bar = ProgressBar(total=total, ascii_only=ascii_only)
+    bar.hide_cursor()
+    done_seconds, speed, size, interrupted = 0.0, None, None, False
+
+    try:
+        for line in src:
+            line = line.strip()
+            if not line or "=" not in line:
+                if line:
+                    log.append(line)
+                continue
+            key, _, value = line.partition("=")
+            key, value = key.strip(), value.strip()
+            if key not in PROGRESS_KEYS:
+                log.append(line)
+                continue
+
+            if key == "out_time_us" or key == "out_time_ms":
+                # Both are reported in microseconds by ffmpeg.
+                if value.isdigit():
+                    done_seconds = int(value) / 1_000_000.0
+            elif key == "out_time":
+                parsed = parse_time(value)
+                if parsed is not None:
+                    done_seconds = parsed
+            elif key == "speed":
+                m = re.match(r"([\d.]+)x", value)
+                speed = float(m.group(1)) if m else None
+            elif key == "total_size":
+                size = int(value) if value.isdigit() else None
+            elif key == "progress":
+                if value == "end":
+                    if total:
+                        done_seconds = total
+                    bar.update(done_seconds, speed, size, force=True)
+                    break
+                bar.update(done_seconds, speed, size)
+    except KeyboardInterrupt:
+        interrupted = True
+        # SIGINT lets ffmpeg flush and close the output container cleanly.
+        try:
+            if os.name == "nt":
+                proc.terminate()
+            else:
+                proc.send_signal(signal.SIGINT)
+        except Exception:
+            pass
+    finally:
+        try:
+            code = proc.wait(timeout=15)
+        except subprocess.TimeoutExpired:
+            proc.kill()
+            code = proc.wait()
+        if drain is not None:
+            drain.join(timeout=2)
+        for stream in (proc.stdout, proc.stderr):
+            if stream:
+                try:
+                    stream.close()
+                except Exception:
+                    pass
+        bar.close(clear=interrupted)
+        bar.show_cursor()
+
+    if interrupted:
+        print("ffprogress: interrupted", file=sys.stderr)
+    elif code != 0:
+        print(f"ffprogress: ffmpeg exited with {code}", file=sys.stderr)
+        for line in log:
+            print("  " + line, file=sys.stderr)
+    return code
+
+
+# --------------------------------------------------------------------------- #
+# cli
+# --------------------------------------------------------------------------- #
+
+USAGE = __doc__.strip()
+
+
+def main(argv=None):
+    argv = list(sys.argv[1:] if argv is None else argv)
+    ffmpeg, ffprobe, ascii_only, total = "ffmpeg", "ffprobe", False, None
+    passthrough = []
+
+    i = 0
+    while i < len(argv):
+        arg = argv[i]
+        if arg == "--":
+            passthrough += argv[i + 1:]
+            break
+        if arg in ("-h", "--help") and not passthrough:
+            print(USAGE)
+            return 0
+        if arg == "--ffmpeg" and i + 1 < len(argv):
+            ffmpeg = argv[i + 1]
+            i += 2
+            continue
+        if arg == "--ffprobe" and i + 1 < len(argv):
+            ffprobe = argv[i + 1]
+            i += 2
+            continue
+        if arg == "--duration" and i + 1 < len(argv):
+            total = parse_time(argv[i + 1])
+            i += 2
+            continue
+        if arg == "--ascii":
+            ascii_only = True
+            i += 1
+            continue
+        passthrough.append(arg)
+        i += 1
+
+    if not passthrough:
+        print(USAGE)
+        return 2
+    return run(passthrough, ffmpeg=ffmpeg, ffprobe=ffprobe,
+               ascii_only=ascii_only, total=total)
+
+
+if __name__ == "__main__":
+    try:
+        sys.exit(main())
+    except KeyboardInterrupt:
+        sys.exit(130)
