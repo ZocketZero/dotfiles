@@ -54,7 +54,7 @@ def "setup hyprland" [command: string@[
 ] = "apt"] {
 
   if $command == "apt" {
-    sudo apt install hyprland kitty waybar wofi fonts-font-awesome xdg-desktop-portal-hyprland cliphist wl-clipboard hyprland-qtutils hyprlauncher mako-notifier slurp grim
+    sudo apt install hyprland kitty waybar wofi fonts-font-awesome xdg-desktop-portal-hyprland cliphist wl-clipboard hyprland-qtutils hyprlauncher mako-notifier slurp grim wireplumber hyprpaper hyprlock 
   } else {
     print $"($command) is not support"
   }
