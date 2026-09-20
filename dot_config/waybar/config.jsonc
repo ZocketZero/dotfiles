@@ -1,7 +1,7 @@
 {
   "layer": "top", // Wayland layer-shell (top/bottom)
   "position": "bottom", // Screen edge placement
-  "height": 30, // Pixel height (leave blank for dynamic)
+  "height": 32, // Pixel height (leave blank for dynamic)
   "spacing": 4, // Gaps between modules
   "start_hidden": true,
   "modules-left": [
