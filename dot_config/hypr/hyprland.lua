@@ -330,37 +330,34 @@ hl.device({
 
 --##################
 
-local mainMod = "SUPER"
+-- Shutdown
+hl.bind(mainMod .. " + SHIFT + P", hl.dsp.exec_cmd("hyprshutdown"))
 
-hl.bind(mainMod .. " + " .. "K", hl.dsp.exec_cmd("kitty"))
+-- open terminal
+hl.bind(mainMod .. " + " .. "K", hl.dsp.exec_cmd(terminal))
 
+-- lock screen
 hl.bind(mainMod .. " + " .. "L", hl.dsp.exec_cmd("hyprlock"))
 
 -- Toggle Waybar visibility (hide/show)
-
 hl.bind(mainMod .. " + " .. "B", hl.dsp.exec_cmd("killall -SIGUSR1 waybar"))
-
--- Kill waybar if running, otherwise launch it
-
--- bind = $mainMod, B, exec, pkill waybar || waybar
 
 hl.bind(mainMod .. " + " .. "C", hl.dsp.window.close())
 
+-- lockout
 hl.bind(mainMod .. " + SHIFT + " .. "M", hl.dsp.exit())
 
-hl.bind(mainMod .. " + " .. "E", hl.dsp.exec_cmd("xdg-open ~"))
+-- open file manager
+hl.bind(mainMod .. " + " .. "E", hl.dsp.exec_cmd(fileManager))
 
 hl.bind(mainMod .. " + " .. "V", hl.dsp.window.float())
 
+-- open menu to launch application
 hl.bind("ALT + SPACE", hl.dsp.exec_cmd(menu))
 
 hl.bind(mainMod .. " + " .. "P", hl.dsp.window.pseudo())
 
--- dwindle
-
 hl.bind(mainMod .. " + " .. "N", hl.dsp.layout("togglesplit"))
-
--- dwindle
 
 hl.bind(mainMod .. " + " .. "F", hl.dsp.window.fullscreen())
 
