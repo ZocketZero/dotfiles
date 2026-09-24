@@ -48,6 +48,19 @@ def "setup extrepo" [] {
 
 }
 
+# Install needed packages for niri
+def "setup niri" [] {
+sudo apt install -y \
+  fuzzel \
+  waybar \
+  mako-notifier \
+  xdg-desktop-portal-gnome \
+  xdg-desktop-portal-gtk \
+  kitty \
+  hyprpaper \
+  xwayland-satellite
+}
+
 # Install needed packages for hyprland
 def "setup hyprland" [command: string@[
   "apt"
