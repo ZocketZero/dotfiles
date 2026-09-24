@@ -20,3 +20,19 @@ window#waybar {
 #cpu, #memory, #clock {
     padding: 0 10px;
 }
+
+#taskbar button {
+  padding: 0 8px;
+  background: transparent;
+  color: #c0caf5;
+  border-bottom: 2px solid transparent;
+}
+
+#taskbar button.active {
+  background: rgba(255, 255, 255, 0.1);
+  border-bottom: 2px solid #7aa2f7;
+}
+
+#taskbar button:hover {
+  background: rgba(255, 255, 255, 0.15);
+}

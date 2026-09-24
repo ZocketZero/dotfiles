@@ -5,6 +5,7 @@
   "spacing": 4, // Gaps between modules
   "start_hidden": true,
   "modules-left": [
+    "wlr/taskbar",
     "hyprland/workspaces",
     "hyprland/mode"
   ],
@@ -23,6 +24,18 @@
     "tray"
   ],
   // Module Definitions
+  "wlr/taskbar": {
+    "format": "{icon} {title:.15}",
+    "icon-size": 18,
+    "max-length": 20,
+    "icon-theme": "Adwaita",
+    "tooltip-format": "{title}",
+    "on-click": "activate",
+    "on-click-middle": "close",
+    "ignore-list": [
+      "Alacritty"
+    ]
+  },
   "hyprland/workspaces": {
     "format": "{name}",
     "on-click": "activate",
