@@ -39,12 +39,29 @@ def lss [path: glob = .] { ls -da $path | sort-by size }
 def lssp [path: glob = .] { lss $path | print }
 
 # List and sort by modified
-def lst [-p] {
+def lst [-p, count: int=0] {
   if $p {
-  ls -a | sort-by modified | print
+    if $count > 1 {
+      ls -a | sort-by modified | last $count | print
+    } else if $count == 1 {
+      ls -a | sort-by modified | last | print
+    } else {
+      ls -a | sort-by modified | print
+    }
   } else {
-  ls -a | sort-by modified
+   if $count > 1 {
+      ls -a | sort-by modified | last $count
+    } else if $count == 1 {
+      ls -a | sort-by modified | last
+    } else {
+      ls -a | sort-by modified
+    } 
   }
+}
+
+# Get only one item
+def lsto [] {
+  lst 1|get name
 }
 
 alias pod = podman

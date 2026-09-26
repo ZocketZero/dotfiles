@@ -59,6 +59,7 @@ def "setup niri" [] {
     xdg-desktop-portal-gtk
     kitty
     hyprpaper
+    xwayland
   )
 }
 

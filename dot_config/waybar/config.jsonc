@@ -3,7 +3,7 @@
   "position": "bottom", // Screen edge placement
   "height": 32, // Pixel height (leave blank for dynamic)
   "spacing": 4, // Gaps between modules
-  "start_hidden": true,
+  "start_hidden": false,
   "modules-left": [
     "wlr/taskbar",
     "hyprland/workspaces",
@@ -13,8 +13,8 @@
     "hyprland/window"
   ],
   "modules-right": [
-    "custom/vpn-status",
-    "custom/vpn-mode",
+    // "custom/vpn-status",
+    // "custom/vpn-mode",
     "pulseaudio",
     "backlight",
     "cpu",
@@ -27,7 +27,7 @@
   "wlr/taskbar": {
     "format": "{icon} {title:.15}",
     "icon-size": 18,
-    "max-length": 20,
+    "max-length": 15,
     "icon-theme": "Adwaita",
     "tooltip-format": "{title}",
     "on-click": "activate",
