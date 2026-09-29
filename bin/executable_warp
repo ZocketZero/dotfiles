@@ -7,8 +7,13 @@ argparser = argparse.ArgumentParser()
 
 sub_parser = argparser.add_subparsers(dest="command")
 sub_parser.add_parser("status", help="print status")
-sub_parser.add_parser("doh", help="connect to doh mode", aliases=['h'])
-sub_parser.add_parser("warp", help="connect to warp mode", aliases=['w'])
+
+sub_parser.add_parser("doh", help="connect to doh mode", aliases=["h"])
+sub_parser.add_parser("dot", help="conect to dot mode", aliases=["t"])
+sub_parser.add_parser("warp", help="connect to warp mode", aliases=["w"])
+sub_parser.add_parser("wp", help="warp mode")
+sub_parser.add_parser("wh", help="warp+doh mode")
+sub_parser.add_parser("wt", help="warp+dot mode")
 
 sub_parser.add_parser("connect", help="turn on connection to warp-cli", aliases=["c"])
 sub_parser.add_parser(
@@ -39,10 +44,18 @@ if __name__ == "__main__":
 
     if cmd in ["status", "s"]:
         status()
+
+    elif cmd in ["dot", "t"]:
+        change_mode("dot")
     elif cmd in ["doh", "h"]:
         change_mode("doh")
-    elif cmd in ["warp", "w"]:
+    elif cmd in ["warp", "w"] or cmd == "wp":
+        change_mode("warp")
+    elif cmd == "dot":
+        change_mode("warp+dot")
+    elif cmd == "doh":
         change_mode("warp+doh")
+
     elif cmd in ["connnect", "c"]:
         turn_on()
     elif cmd in ["disconnect", "d"]:
