@@ -22,20 +22,20 @@ sub_parser.add_parser(
 
 
 def status():
-    subprocess.run(["warp-cli", "status"])
-    subprocess.run("warp-cli settings | grep Mode", shell=True)
+    subprocess.run(["warp-cli", "status"], check=False)
+    subprocess.run("warp-cli settings | grep Mode", check=False, shell=True)
 
 
 def change_mode(mode: str):
-    subprocess.run(["warp-cli", "mode", mode])
+    subprocess.run(["warp-cli", "mode", mode], check=False)
 
 
 def turn_on():
-    subprocess.run(["warp-cli", "connect"])
+    subprocess.run(["warp-cli", "connect"], check=False)
 
 
 def turn_off():
-    subprocess.run(["warp-cli", "disconnect"])
+    subprocess.run(["warp-cli", "disconnect"], check=False)
 
 
 if __name__ == "__main__":
@@ -51,9 +51,9 @@ if __name__ == "__main__":
         change_mode("doh")
     elif cmd in ["warp", "w"] or cmd == "wp":
         change_mode("warp")
-    elif cmd == "dot":
+    elif cmd == "wt":
         change_mode("warp+dot")
-    elif cmd == "doh":
+    elif cmd == "wh":
         change_mode("warp+doh")
 
     elif cmd in ["connnect", "c"]:
