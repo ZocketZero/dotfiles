@@ -5,13 +5,8 @@ alias psn='ps -o user,pid,ni,stat,start,time,cmd'
 alias y='yes'
 alias first='head -1'
 alias last='tail -1'
-lss() {
-    if [[ "$@" == "" ]];then
-        du -hd 0 -- * 2> /dev/null | sort -h
-    else
-        du -hd 0 -- "$@" 2> /dev/null | sort -h
-    fi
-}
+alias icat='kitten icat'
+
 
 # Shorter commands for any programs.
 alias pod='podman'
@@ -33,17 +28,35 @@ lpod() {
 }
 
 lst() {
-    ls -tr "$@"
+  if [[ "$1" == "" ]];then
+    ls -tr
+  else
+    ls -t | awk "NR==$1"
+  fi
 }
 
 # Disk utils
 # using nu command for ls.
-lsd () {
-    if [[ "$1" == "" ]]; then
-        du -sh -- * | sort -h
+
+lss() {
+    if [[ "$@" == "" ]];then
+        du -hd 0 -- * 2> /dev/null | sort -h
     else
-        du -sh $1 | sort -h
+        du -hd 0 -- "$@" 2> /dev/null | sort -h
     fi
+}
+
+
+lsf () {
+  fdfind -tf -d1
+}
+
+lsfs () {
+  fdfind -tf -d1 -x du -hd 0
+}
+
+lsd () {
+  ls -tr -d */
 }
 
 # alias dud='du -hd 0 '

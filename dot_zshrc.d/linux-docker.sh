@@ -33,3 +33,4 @@ eval "
 done
 
 unset -m 'vm_*'
+unset 'i'
