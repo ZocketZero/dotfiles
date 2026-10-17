@@ -16,7 +16,7 @@ def "setup mise install-needed" [] {
 def "setup starship" [] {
   if (which starship | is-not-empty ) {
     starship init nu | save --force $"($nu.default-config-dir)/nu.d/_starship.nu"
-  } else if (which mise | is-not-empty )  and (mise exec -- starship | complete ).exit_code == 0 {
+  } else if (which mise | is-not-empty )  and (mise exec -- starship | complete ).exit_code in [0 2] {
     mise exec -- starship init nu | save --force $"($nu.default-config-dir)/nu.d/_starship.nu"
   } else {
     print "starship is not setup, not found starship binary"
@@ -29,7 +29,7 @@ def "setup carapace" [] {
   # generate carapace
   if (which carapace | is-not-empty ) {
     carapace _carapace nushell | save --force $"($nu.default-config-dir)/nu.d/_carapace.nu"
-  } else if (which mise | is-not-empty )  and (mise exec -- carapace | complete ).exit_code == 0 {
+  } else if (which mise | is-not-empty )  and (mise exec -- carapace | complete ).exit_code in [0 2] {
     mise exec -- carapace _carapace nushell | save --force $"($nu.default-config-dir)/nu.d/_carapace.nu"
   } else {
     print "carapace is not setup, not found carapace binary"
