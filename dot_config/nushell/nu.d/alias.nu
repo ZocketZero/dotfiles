@@ -3,6 +3,7 @@ alias q = exit
 alias y = yes
 
 # Git alias command
+alias g = get
 alias ga = git add
 alias gd = git diff
 alias gc = git commit
@@ -15,6 +16,12 @@ alias gla = git log --graph --all --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s
 alias sb = sort-by
 alias p = print
 alias exp = explore
+
+def bs [path] {
+  job spawn {
+    start $path
+  }
+}
 
 # list with permissions
 def lsm [path: glob = .] {
