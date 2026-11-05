@@ -7,6 +7,7 @@ def bwrapd [
     --dev-bind /dev /dev
     --proc /proc
     --ro-bind /etc /etc
+    --bind /run/user/ /run/user/
     --bind $"($env.HOME)" $"($env.HOME)"
     --tmpfs /tmp
     --tmpfs $"($env.HOME)/.config/mozilla"
@@ -26,7 +27,9 @@ def san [ ] {
 }
 
 # seperate home directory for each program
-def container [...args: string] {
+def container [...args: string,
+  -c # bind current dir
+] {
   let bin = $args | first
   let container_path = $env.HOME | path join container ($bin| str replace / . -a)
   if ($container_path | path exists) {
@@ -35,5 +38,5 @@ def container [...args: string] {
     mkdir $container_path
     echo $"create container ($container_path)"
   }
-  bwrapd -- --bind $container_path ($env.HOME) ...$args
+  bwrapd -- --bind $container_path ($env.HOME) ...(if $c { [--bind (pwd) (pwd)] })  ...$args
 }
