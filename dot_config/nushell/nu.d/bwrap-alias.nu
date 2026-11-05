@@ -26,7 +26,8 @@ def san [ ] {
 }
 
 # seperate home directory for each program
-def container [bin: path] {
+def container [...args: string] {
+  let bin = $args | first
   let container_path = $env.HOME | path join container ($bin| str replace / . -a)
   if ($container_path | path exists) {
     echo $"using ($container_path)"
@@ -34,5 +35,5 @@ def container [bin: path] {
     mkdir $container_path
     echo $"create container ($container_path)"
   }
-  bwrapd -- --bind $container_path ($env.HOME) $bin
+  bwrapd -- --bind $container_path ($env.HOME) ...$args
 }
