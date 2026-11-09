@@ -400,7 +400,9 @@ binds {
     Mod+I       hotkey-overlay-title="Open a Terminal: kitty"     { spawn "kitty"; }
     Mod+Shift+I       hotkey-overlay-title="Open a Terminal: kitty"     { spawn "bwrap-kitty"; }
     Alt+Space   hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
-    Mod+Shift+L hotkey-overlay-title="Lock the Screen: hyprlock"  { spawn "hyprlock"; }
+    Mod+Shift+L hotkey-overlay-title="Lock the Screen: hyprlock"  {
+      spawn "sh" "-c" "hyprlock & niri msg action power-off-monitors"
+    }
 
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.
@@ -649,9 +651,9 @@ binds {
     // Mod+Space       { switch-layout "next"; }
     // Mod+Shift+Space { switch-layout "prev"; }
 
-    Print { screenshot; }
-    Ctrl+Print { screenshot-screen; }
-    Alt+Print { screenshot-window; }
+    Mod+S { screenshot; }
+    Mod+Shift+S { screenshot-window; }
+    Alt+Shift+S { screenshot-screen; }
 
     // Applications such as remote-desktop clients and software KVM switches may
     // request that niri stops processing the keyboard shortcuts defined here
