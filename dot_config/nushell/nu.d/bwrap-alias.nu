@@ -30,13 +30,14 @@ def san [ ] {
 def container [...args: string,
   -c # bind current dir
   --tmp # bind tmpfs to home directory instead
+  --profile (-p) = "default" # split profile for the program
 ] {
   mut home_path = []
   if $tmp {
     $home_path = [--tmpfs ($env.HOME)]
   } else { 
     let bin = $args | first
-    let container_path = $env.HOME | path join container ($bin| str replace / . -a)
+    let container_path = $env.HOME | path join container ($bin| str replace / . -a) | $in + ":" + $profile
     if ($container_path | path exists) {
       echo $"using ($container_path)"
     } else {
