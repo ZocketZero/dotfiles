@@ -17,6 +17,7 @@
     // "custom/vpn-mode",
     "pulseaudio",
     "backlight",
+    "niri/language",
     "cpu",
     "memory",
     "network",
@@ -24,6 +25,11 @@
     "tray"
   ],
   // Module Definitions
+  "niri/language": {
+    "format": "{}",
+    "format-th": "TH",
+    "format-en": "US"
+  },
   "wlr/taskbar": {
     "format": "{icon} {title:.15}",
     "icon-size": 18,
