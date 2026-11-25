@@ -11,6 +11,7 @@ def bwrapd [
     --bind $"($env.HOME)" $"($env.HOME)"
     --tmpfs /tmp
     --tmpfs $"($env.HOME)/.config/mozilla"
+    --tmpfs $"($env.HOME)/.config/BraveSoftware"
     --tmpfs $"($env.HOME)/.ssh"
     --tmpfs $"($env.HOME)/.mozilla"
     --tmpfs $"($env.HOME)/Documents"
